@@ -16,11 +16,13 @@
             background-color: black;
             color: white;
             text-align: center;
+            position: relative;
         }
         #urlInput {
+            text-align: center;
             position: absolute;
             top: 9px;
-            width: 35%;
+            width: 20%; 
             padding: 8px;
             font-size: 16px;
             border: none;
@@ -29,6 +31,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             outline: none;
             opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        #topLine {
+            position: absolute;
+            top: 9px;
+            width: 19%;
+            height: 2px;
+            background-color: rgb(196, 196, 196);
+            display: none; /* Initially hidden */
             transition: opacity 0.5s ease;
         }
         #channelMessage {
@@ -83,42 +94,28 @@
 
         function handleInputFocus() {
             const inputElement = document.getElementById('urlInput');
+            const topLine = document.getElementById('topLine');
+            
             inputElement.style.opacity = '1';
+            topLine.style.display = 'none'; // Hide the white line when input is active
+            
             clearTimeout(window.inputTimer);
             window.inputTimer = setTimeout(() => {
                 inputElement.style.opacity = '0';
                 inputElement.value = '';
                 inputElement.blur();
+                topLine.style.display = 'block'; // Show the white line when input disappears
             }, 5000);
         }
-
-            function removeShadowClass() {
-            document.querySelectorAll('.shadow').forEach(element => {
-                element.classList.remove('shadow');
-            });
-        }
-
-        window.onload = function () {
-            removeShadowClass(); // Run initially
-
-            // Monitor body for new elements with 'shadow' class
-            const observer = new MutationObserver(() => removeShadowClass());
-            observer.observe(document.body, { childList: true, subtree: true });
-
-            // Also run every second in case new elements appear dynamically
-            setInterval(removeShadowClass, 1000);
-        };
         
-
-
-        setInterval(removeShadowClass, 1000);
     </script>
 </head>
 <body>
     <div id="channelMessage">
-        Join<br> <a href="https://t.me/CocoBotz" style="color: lightblue;">@CocoBotz</a>
+        Join<br> <a href="https://t.me/CocoBotz" style="color: lightblue; text-decoration: none;">@CocoBotz</a>
     </div>
     <input id="urlInput" type="text" placeholder="Paste URL" oninput="handleInputChange(event)" onfocus="handleInputFocus()">
+    <div id="topLine"></div> <!-- White line div -->
     <div id="errorMessage"></div>
     <iframe id="myIframe" frameborder="0" allowfullscreen></iframe>
 </body>
