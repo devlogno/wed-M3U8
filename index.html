@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+        #urlInput {
+            position: absolute;
+            top: 9px;
+            width: 35%;
+            padding: 8px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            outline: none;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        #channelMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 20;
+        }
+        #errorMessage {
+            position: absolute;
+            top: 50px;
+            color: red;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+    <script>
+        function extractIdFromUrl(url) {
+            const regex = /\/s\/1([^/]+)/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        function handleInputChange(event) {
+            const url = event.target.value;
+            const id = extractIdFromUrl(url);
+            const iframe = document.getElementById('myIframe');
+            const errorMessage = document.getElementById('errorMessage');
+            const channelMessage = document.getElementById('channelMessage');
+
+            if (id) {
+                iframe.src = `https://teraboxdownloaderonline.com/api/download-m3u8?terabox_link=https%3A%2F%2F1024terabox.com%2Fs%2F1${id}`;
+                errorMessage.textContent = '';
+                setTimeout(() => {
+                    channelMessage.style.display = 'none';
+                }, 3000);
+            } else {
+                errorMessage.textContent = 'Invalid link. Please enter a valid Terabox URL.';
+            }
+        }
+
+        function handleInputFocus() {
+            const inputElement = document.getElementById('urlInput');
+            inputElement.style.opacity = '1';
+            clearTimeout(window.inputTimer);
+            window.inputTimer = setTimeout(() => {
+                inputElement.style.opacity = '0';
+                inputElement.value = '';
+                inputElement.blur();
+            }, 5000);
+        }
+
+            function removeShadowClass() {
+            document.querySelectorAll('.shadow').forEach(element => {
+                element.classList.remove('shadow');
+            });
+        }
+
+        window.onload = function () {
+            removeShadowClass(); // Run initially
+
+            // Monitor body for new elements with 'shadow' class
+            const observer = new MutationObserver(() => removeShadowClass());
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            // Also run every second in case new elements appear dynamically
+            setInterval(removeShadowClass, 1000);
+        };
+        
+
+
+        setInterval(removeShadowClass, 1000);
+    </script>
+</head>
+<body>
+    <div id="channelMessage">
+        Join<br> <a href="https://t.me/CocoBotz" style="color: lightblue;">@CocoBotz</a>
+    </div>
+    <input id="urlInput" type="text" placeholder="Paste URL" oninput="handleInputChange(event)" onfocus="handleInputFocus()">
+    <div id="errorMessage"></div>
+    <iframe id="myIframe" frameborder="0" allowfullscreen></iframe>
+</body>
+</html>
